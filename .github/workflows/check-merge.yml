@@ -14,9 +14,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout the source branch
+        run: git checkout ${{ github.head_ref }}
+
       - name: Get the current branch name
         id: branch-name
         run: echo "::set-output name=branch::$(git rev-parse --abbrev-ref HEAD)"
+
+      - name: Fetch all branches
+        run: git fetch origin
 
       - name: Check if current branch was merged into 'test'
         run: |
