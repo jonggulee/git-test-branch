@@ -6,19 +6,24 @@ on:
       - main
 
 jobs:
-  check_merge-merge:
+  check-test-branch-merge:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0 # 이 부분은 모든 브랜치와 태그 정보를 가져오기 위함입니다.
+          fetch-depth: 0
 
-      - name: Check if 'a' was merged into 'test'
+      - name: Get the current branch name
+        id: branch-name
+        run: echo "::set-output name=branch::$(git rev-parse --abbrev-ref HEAD)"
+
+      - name: Check if current branch was merged into 'test'
         run: |
-          if [[ "$(git branch --contains origin/a --remote | grep 'origin/test')" != "" ]]; then
-            echo "a 브랜치는 test 브랜치에 머지된 적이 있습니다."
+          CURRENT_BRANCH="${{ steps.branch-name.outputs.branch }}"
+          if [[ "$(git branch --contains origin/$CURRENT_BRANCH --remote | grep 'origin/test')" != "" ]]; then
+            echo "$CURRENT_BRANCH 브랜치는 test 브랜치에 머지된 적이 있습니다."
           else
-            echo "Error: a 브랜치는 test 브랜치에 머지된 적이 없습니다."
+            echo "Error: $CURRENT_BRANCH 브랜치는 test 브랜치에 머지된 적이 없습니다."
             exit 1
           fi
