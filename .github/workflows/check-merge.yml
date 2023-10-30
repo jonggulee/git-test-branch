@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Check if PR was merged to test-branch
         run: |
-          if [ "${{ github.event.pull_request.merged }}" == "true" ] && [ "${{ github.event.pull_request.base.ref }}" == "test-branch" ]; then
+          if [ "${{ github.event.pull_request.merged }}" == "true" ] && [ "${{ github.event.pull_request.base.ref }}" == "test" ]; then
             echo "PR was merged to test-branch."
           else
             echo "PR was not merged to test-branch."
