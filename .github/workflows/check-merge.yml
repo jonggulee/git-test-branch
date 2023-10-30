@@ -1,24 +1,24 @@
-name: Check PR Merge
+name: Check Merge Condition
 
 on:
   pull_request:
-    types:
-      - opened
     branches:
       - main
 
 jobs:
-  check_merge:
+  check_merge-merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if 'test' branch has 'dev' branch's changes
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # 이 부분은 모든 브랜치와 태그 정보를 가져오기 위함입니다.
+
+      - name: Check if 'a' was merged into 'test'
         run: |
-          git fetch origin dev:dev
-          CHANGES=$(git log dev..test)
-          if [ -n "$CHANGES" ]; then
-            echo "Changes from 'dev' branch have been merged into 'test' branch."
+          if [[ "$(git branch --contains origin/a --remote | grep 'origin/test')" != "" ]]; then
+            echo "a 브랜치는 test 브랜치에 머지된 적이 있습니다."
           else
-            echo "No changes from 'dev' branch have been merged into 'test' branch."
+            echo "Error: a 브랜치는 test 브랜치에 머지된 적이 없습니다."
             exit 1
           fi
-
