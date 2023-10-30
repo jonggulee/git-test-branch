@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       - name: Checkout the source branch
-        run: git checkout ${{ github.head_ref }}
+        run: git checkout -- ${{ github.head_ref }}
 
       - name: Get the current branch name
         id: branch-name
