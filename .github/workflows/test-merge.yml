@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  check_merge:
+  test_merge:
     runs-on: ubuntu-latest
 
     steps:
