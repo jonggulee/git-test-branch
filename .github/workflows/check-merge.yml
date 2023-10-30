@@ -19,7 +19,7 @@ jobs:
 
       - name: Get the current branch name
         id: branch-name
-        run: echo "::set-output name=branch::$(git rev-parse --abbrev-ref HEAD)"
+        run: echo "::set-output name=branch::${{ github.head_ref }}"
 
       - name: Fetch all branches
         run: git fetch origin
