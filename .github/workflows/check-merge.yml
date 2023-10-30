@@ -3,17 +3,22 @@ name: Check PR Merge
 on:
   pull_request:
     types:
-      - closed
+      - opened
+    branches:
+      - main
 
 jobs:
   check_merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if PR was merged to test-branch
+      - name: Check if 'test' branch has 'dev' branch's changes
         run: |
-          if [ "${{ github.event.pull_request.merged }}" == "true" ] && [ "${{ github.event.pull_request.base.ref }}" == "test" ]; then
-            echo "PR was merged to test-branch."
+          git fetch origin dev:dev
+          CHANGES=$(git log dev..test)
+          if [ -n "$CHANGES" ]; then
+            echo "Changes from 'dev' branch have been merged into 'test' branch."
           else
-            echo "PR was not merged to test-branch."
+            echo "No changes from 'dev' branch have been merged into 'test' branch."
             exit 1
           fi
+
