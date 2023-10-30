@@ -1,0 +1,19 @@
+name: Check PR Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  check_merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR was merged to test-branch
+        run: |
+          if [ "${{ github.event.pull_request.merged }}" == "true" ] && [ "${{ github.event.pull_request.base.ref }}" == "test-branch" ]; then
+            echo "PR was merged to test-branch."
+          else
+            echo "PR was not merged to test-branch."
+            exit 1
+          fi
